@@ -1,50 +1,78 @@
-function selectionSort(self)
-{
-    if (self.startIndex >= self.randoms.length - 1) clearInterval(this);
-    else {
-        let smallestIndex = self.startIndex;
-        for(let i = self.startIndex + 1; i < self.randoms.length; i++) {
-            if(self.randoms[i].val < self.randoms[smallestIndex].val) {
-                smallestIndex = i
+function selectionSort(arrayCopy, animations) {
+    let startIdx = 0;
+    while(startIdx < arrayCopy.length - 1) {
+        let smallestIdx = startIdx;
+        for(let i = startIdx + 1; i < arrayCopy.length; i++) {
+            if(arrayCopy[i].val < arrayCopy[smallestIdx].val) {
+                smallestIdx = i
             }
         }
-        let temp = self.randoms[self.startIndex];
-        self.randoms[self.startIndex] = self.randoms[smallestIndex];
-        self.randoms[smallestIndex] = temp;
-        self.highlight(self.startIndex, smallestIndex);
-        self.startIndex++;
+        let temp = arrayCopy[startIdx];
+        arrayCopy[startIdx] = arrayCopy[smallestIdx];
+        arrayCopy[smallestIdx] = temp;
+        animations.push([smallestIdx, startIdx]);
+        startIdx++
     }
 }
 
-function bubbleSort(self)
-{
-    if(self.sorted) clearInterval(this);
-    self.sorted = true;
-    for(let i=0;i<self.randoms.length -1 ; i++) {
-        if(self.randoms[i].val > self.randoms[i+1].val){
-            let temp = self.randoms[i];
-            self.randoms[i] = self.randoms[i+1];
-            self.randoms[i+1] = temp;
-            let x = i + 1;
-            self.highlight(i,x);
-            self.sorted = false;
+function bubbleSort(arrayCopy, animations) {
+    let sorted = false;
+    let counter = 0;
+    while(!sorted){
+        sorted = true;
+        for(let i=0;i<arrayCopy.length -1 - counter; i++) {
+            if(arrayCopy[i].val > arrayCopy[i+1].val){
+                let temp = arrayCopy[i];
+                arrayCopy[i] = arrayCopy[i+1];
+                arrayCopy[i+1] = temp;
+                sorted = false;
+                animations.push([i, i+1]);
+            }
+        }
+        counter++
+    }
+}
+
+function insertionSort(arrayCopy, animations) {
+    for(let i = 0; i < arrayCopy.length; i++) {
+        let j = i;
+        while(j > 0 && arrayCopy[j].val < arrayCopy[j-1].val){
+            let temp = arrayCopy[j];
+            arrayCopy[j] = arrayCopy[j-1];
+            arrayCopy[j-1] = temp;
+            animations.push([j, --j])
         }
     }
 }
 
-function insertionSort(self)
-{
-    if (self.startIndex >= self.randoms.length ) clearInterval(this);
-    else {
-        let j = self.startIndex;
-        while(j > 0 && self.randoms[j].val < self.randoms[j-1].val){
-            let temp = self.randoms[j];
-            self.randoms[j] = self.randoms[j-1];
-            self.randoms[j-1] = temp;
-            self.highlight(j, --j);
+function quickSort(self, startIdx, endIdx) {
+    if (startIdx >= endIdx) clearInterval(this)
+    const pivot = startIdx;
+    let leftIndex = startIdx + 1;
+    let rightIndex = endIdx;
+    while (rightIndex >= leftIndex) {
+        if (self.randoms[leftIndex].val > self.randoms[pivot].val && self.randoms[rightIndex].val < self.randoms[pivot].val) {
+            swap(leftIndex, rightIndex, self.randoms);
         }
-        self.startIndex++;
+        self.highlight(leftIndex, rightIndex, self.randoms)
+        if (self.randoms[leftIndex].val <= self.randoms[pivot].val) leftIndex++;
+        if (self.randoms[rightIndex].val >= self.randoms[pivot].val) rightIndex--;
+    }
+    swap(pivot, rightIndex, self.randoms);
+    const leftSubarrayIsSmaller = rightIndex - 1 - startIdx < endIdx - (rightIndex + 1);
+    if (leftSubarrayIsSmaller) {
+        quickSort(self, startIdx, rightIndex - 1);
+        quickSort(self, rightIndex + 1, endIdx);
+    } else {
+        quickSort(self, rightIndex + 1, endIdx);
+        quickSort(self, startIdx, rightIndex - 1);
     }
 }
 
-export {selectionSort, bubbleSort, insertionSort}
+function swap(i, j, array) {
+    let temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+}
+
+export {selectionSort, bubbleSort, insertionSort, quickSort}

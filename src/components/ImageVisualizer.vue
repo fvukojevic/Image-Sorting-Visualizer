@@ -20,6 +20,7 @@
                     <button class="btn btn-primary btn-space" @click="insertion">Insertion sort</button>
                     <button class="btn btn-primary btn-space" @click="selection">Selection sort</button>
                     <button class="btn btn-primary btn-space" @click="bubble">Bubble sort</button>
+                    <button class="btn btn-primary btn-space" @click="quick">Quick sort</button>
                 </div>
             </div>
             <br>
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-    import {selectionSort, bubbleSort, insertionSort} from "../sorts";
+    import {selectionSort, bubbleSort, insertionSort, quickSort} from "../sorts";
 
     export default {
         name: 'ImageVisualizer',
@@ -49,33 +50,36 @@
                 pieceHeight: null,
                 started: false,
                 startIndex:0,
-                sorted:false,
+                animations:[],
             }
         },
         methods: {
             insertion: function() {
-                this.startIndex = 0;
-                let self = this;
+                this.animations = [];
+                let postDataCopy = this.randoms.slice();
 
-                setInterval(function(){
-                   insertionSort(self)
-                }, 1000);
+                insertionSort(postDataCopy, this.animations);
+                this.processAnimation();
             },
             bubble: function() {
-                this.sorted = false;
-                let self = this;
+                this.animations = [];
+                let postDataCopy = this.randoms.slice();
 
-                setInterval(function() {
-                    bubbleSort(self)
-                }, 1000)
+                bubbleSort(postDataCopy, this.animations);
+                this.processAnimation();
             },
             selection: function() {
-                this.startIndex = 0;
-                let self = this;
+                this.animations = [];
+                let postDataCopy = this.randoms.slice();
 
-                setInterval(function(){
-                    selectionSort(self)
-                }, 1000);
+                selectionSort(postDataCopy, this.animations);
+                this.processAnimation();
+            },
+            quick: function() {
+                let self = this;
+                setInterval(function () {
+                    quickSort(self)
+                }, 1000)
             },
             start: function() {
                 this.started = true;
@@ -115,7 +119,6 @@
                 let self = this
                 setTimeout(function(){
                     let i=0;
-
                     for(let y=0;y<self.rows;y++){
                         for(let x=0;x<self.cols;x++){
                             let p=self.randoms[i++];
@@ -127,6 +130,20 @@
                         }}
                 }, 500)
             },
+            processAnimation: function() {
+                let self = this;
+                setInterval(function(){
+                    if(self.startIndex >= self.animations.length) {
+                        return;
+                    }
+                    let part = self.animations[self.startIndex];
+                    let temp = self.randoms[part[0]];
+                    self.randoms[part[0]] = self.randoms[part[1]];
+                    self.randoms[part[1]] = temp;
+                    self.highlight(part[1], part[0]);
+                    self.startIndex++;
+                }, 1000);
+            }
         }
     }
 </script>
