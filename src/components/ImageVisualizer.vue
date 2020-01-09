@@ -24,7 +24,7 @@
             </div>
             <br>
             <div class="container h-100 d-flex justify-content-center">
-                <canvas id="canvas" ref="canvas" width=300 height=300>
+                <canvas id="canvas" ref="canvas" style="width:80%; height:80%">
                 </canvas>
             </div>
         </div>
