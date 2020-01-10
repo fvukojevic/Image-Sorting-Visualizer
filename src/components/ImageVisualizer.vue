@@ -5,9 +5,8 @@
                 <div class="my-auto">
                     <h1 class="text-center">Sorting Image Visualizer</h1>
                     <hr>
-                    Rows: <input type="text" v-model="rows">
-                    Cols: <input type="text" v-model="cols">
-                    <br><br>
+                    <p>Rows: <input type="number" v-model="rows"></p>
+                    <p>Cols: <input type="number" v-model="cols"></p>
                     <input type="text" style="width:100%" placeholder="Copy Image URL" v-model="link">
                     <br><br>
                     <button class="btn-success col text-center" @click="start">Start</button>
@@ -76,12 +75,14 @@
                 this.processAnimation();
             },
             quick: function() {
-                let self = this;
-                setInterval(function () {
-                    quickSort(self)
-                }, 1000)
+                this.animations = [];
+                let postDataCopy = this.randoms.slice();
+
+                quickSort(postDataCopy, this.animations, 0, this.randoms.length - 1)
+                this.processAnimation();
             },
             start: function() {
+                this.checkForInvalidInput();
                 this.started = true;
                 this.canvas=this.$refs.canvas;
                 this.ctx =this.canvas.getContext("2d");
@@ -102,9 +103,28 @@
                         }
                     }
                     for(let j, x, i = self.randoms.length; i; j = Math.floor(Math.random() * i), x = self.randoms[--i], self.randoms[i] = self.randoms[j], self.randoms[j] = x);
-
                     self.drawImage();
                 };
+            },
+            checkForInvalidInput: function() {
+                if(this.rows < 1) this.rows = 1;
+                if(this.rows > 10) this.rows = 10;
+                if(this.cols < 1) this.cols = 1;
+                if(this.cols > 10) this.cols = 10;
+            },
+            processAnimation: function() {
+                let self = this;
+                setInterval(function(){
+                    if(self.startIndex >= self.animations.length) {
+                        return;
+                    }
+                    let part = self.animations[self.startIndex];
+                    let temp = self.randoms[part[0]];
+                    self.randoms[part[0]] = self.randoms[part[1]];
+                    self.randoms[part[1]] = temp;
+                    self.highlight(part[1], part[0]);
+                    self.startIndex++;
+                }, 1000);
             },
             highlight: function(first, second) {
                 this.ctx.strokeStyle = "#cfe627";
@@ -129,20 +149,6 @@
                             );
                         }}
                 }, 500)
-            },
-            processAnimation: function() {
-                let self = this;
-                setInterval(function(){
-                    if(self.startIndex >= self.animations.length) {
-                        return;
-                    }
-                    let part = self.animations[self.startIndex];
-                    let temp = self.randoms[part[0]];
-                    self.randoms[part[0]] = self.randoms[part[1]];
-                    self.randoms[part[1]] = temp;
-                    self.highlight(part[1], part[0]);
-                    self.startIndex++;
-                }, 1000);
             }
         }
     }

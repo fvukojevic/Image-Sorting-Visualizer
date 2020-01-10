@@ -7,9 +7,7 @@ function selectionSort(arrayCopy, animations) {
                 smallestIdx = i
             }
         }
-        let temp = arrayCopy[startIdx];
-        arrayCopy[startIdx] = arrayCopy[smallestIdx];
-        arrayCopy[smallestIdx] = temp;
+        swap(smallestIdx, startIdx, arrayCopy);
         animations.push([smallestIdx, startIdx]);
         startIdx++
     }
@@ -22,9 +20,7 @@ function bubbleSort(arrayCopy, animations) {
         sorted = true;
         for(let i=0;i<arrayCopy.length -1 - counter; i++) {
             if(arrayCopy[i].val > arrayCopy[i+1].val){
-                let temp = arrayCopy[i];
-                arrayCopy[i] = arrayCopy[i+1];
-                arrayCopy[i+1] = temp;
+                swap(i, i+1, arrayCopy);
                 sorted = false;
                 animations.push([i, i+1]);
             }
@@ -37,35 +33,34 @@ function insertionSort(arrayCopy, animations) {
     for(let i = 0; i < arrayCopy.length; i++) {
         let j = i;
         while(j > 0 && arrayCopy[j].val < arrayCopy[j-1].val){
-            let temp = arrayCopy[j];
-            arrayCopy[j] = arrayCopy[j-1];
-            arrayCopy[j-1] = temp;
+            swap(j, j - 1, arrayCopy);
             animations.push([j, --j])
         }
     }
 }
 
-function quickSort(self, startIdx, endIdx) {
-    if (startIdx >= endIdx) clearInterval(this)
+function quickSort(arrayCopy, animations, startIdx, endIdx) {
+    if (startIdx >= endIdx) return;
     const pivot = startIdx;
     let leftIndex = startIdx + 1;
     let rightIndex = endIdx;
     while (rightIndex >= leftIndex) {
-        if (self.randoms[leftIndex].val > self.randoms[pivot].val && self.randoms[rightIndex].val < self.randoms[pivot].val) {
-            swap(leftIndex, rightIndex, self.randoms);
+        if (arrayCopy[leftIndex].val > arrayCopy[pivot].val && arrayCopy[rightIndex].val < arrayCopy[pivot].val) {
+            swap(leftIndex, rightIndex, arrayCopy);
+            animations.push([leftIndex, rightIndex]);
         }
-        self.highlight(leftIndex, rightIndex, self.randoms)
-        if (self.randoms[leftIndex].val <= self.randoms[pivot].val) leftIndex++;
-        if (self.randoms[rightIndex].val >= self.randoms[pivot].val) rightIndex--;
+        if (arrayCopy[leftIndex].val <= arrayCopy[pivot].val) leftIndex++;
+        if (arrayCopy[rightIndex].val >= arrayCopy[pivot].val) rightIndex--;
     }
-    swap(pivot, rightIndex, self.randoms);
+    swap(pivot, rightIndex, arrayCopy);
+    animations.push([pivot, rightIndex]);
     const leftSubarrayIsSmaller = rightIndex - 1 - startIdx < endIdx - (rightIndex + 1);
     if (leftSubarrayIsSmaller) {
-        quickSort(self, startIdx, rightIndex - 1);
-        quickSort(self, rightIndex + 1, endIdx);
+        quickSort(arrayCopy, animations, startIdx, rightIndex - 1);
+        quickSort(arrayCopy, animations, rightIndex + 1, endIdx);
     } else {
-        quickSort(self, rightIndex + 1, endIdx);
-        quickSort(self, startIdx, rightIndex - 1);
+        quickSort(arrayCopy, animations,rightIndex + 1, endIdx);
+        quickSort(arrayCopy, animations, startIdx, rightIndex - 1);
     }
 }
 
