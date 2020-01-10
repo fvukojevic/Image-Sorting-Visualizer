@@ -111,6 +111,8 @@
                 if(this.rows > 10) this.rows = 10;
                 if(this.cols < 1) this.cols = 1;
                 if(this.cols > 10) this.cols = 10;
+
+                if(this.link.match(/\.(jpeg|jpg|gif|png)$/) == null) this.link = 'https://i.stack.imgur.com/l60Hf.png';
             },
             processAnimation: function() {
                 let self = this;
