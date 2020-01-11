@@ -1,4 +1,6 @@
-Real Readme comming soon, as for now, this is just a basic way you start a vuejs app after cloning
+Real Readme comming soon, as for now, this is just a basic way you start a vuejs app after cloning.
+
+Test the app at:  https://image-sorting-visualizer.herokuapp.com/
 
 # image-visualizer
 
