@@ -5,28 +5,60 @@
                 <div class="my-auto">
                     <h1 class="text-center">Sorting Image Visualizer</h1>
                     <hr>
-                    <p>Rows: <input type="number" v-model="rows"></p>
-                    <p>Cols: <input type="number" v-model="cols"></p>
-                    <input type="text" style="width:100%" placeholder="Copy Image URL" v-model="link">
-                    <br><br>
-                    <button class="btn-success col text-center" @click="start">Start</button>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Rows</span>
+                        </div>
+                        <input type="text" class="form-control" v-model="rows" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Columns</span>
+                        </div>
+                        <input type="text" class="form-control" v-model="cols" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Image URL</span>
+                        </div>
+                        <input type="text" class="form-control" v-model="link" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                    <button class="btn-success col text-center" @click="start">Process Image</button>
                 </div>
             </div>
         </div>
         <div v-show="started">
-            <div class="container d-flex justify-content-center">
-                <div class="btn-toolbar pull-right">
-                    <button class="btn btn-primary btn-space" @click="insertion">Insertion sort</button>
-                    <button class="btn btn-primary btn-space" @click="selection">Selection sort</button>
-                    <button class="btn btn-primary btn-space" @click="bubble">Bubble sort</button>
-                    <button class="btn btn-primary btn-space" @click="quick">Quick sort</button>
-                    <button class="btn btn-primary btn-space" @click="heap">Heap sort</button>
+              <div class="row">
+                <div class="container h-100 d-flex justify-content-center">
+                    <h1 class="text-center">Choose a sorting algorithm</h1>
                 </div>
-            </div>
+                <div class="container h-100 d-flex justify-content-center">
+                    <div class="col-md-12">
+                        <button class="btn btn-outline-success btn-space" @click="insertion">Insertion sort</button>
+                        <button class="btn btn-outline-success btn-space" @click="selection">Selection sort</button>
+                        <button class="btn btn-outline-success btn-space" @click="bubble">Bubble sort</button>
+                        <button class="btn btn-outline-success btn-space" @click="quick">Quick sort</button>
+                        <button class="btn btn-outline-success btn-space" @click="heap">Heap sort</button>
+                    </div>
+               </div>
+              </div>
             <br>
             <div class="container h-100 d-flex justify-content-center">
                 <canvas id="canvas" ref="canvas" style="width:80%; height:80%">
                 </canvas>
+            </div>
+            <br>
+            <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
+                <h5 class="text-center">Choosen: {{ this.chosen.name }}</h5>
+            </div>
+            <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
+                <h5 class="text-center">Time complexity for {{ this.chosen.name }} : {{ this.chosen.complexity }}</h5>
+            </div>
+            <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
+                <h5 class="text-center">Number of animations(swaps) : {{this.animations.length}}</h5>
+            </div>
+            <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
+                <h5 class="text-center">Execution time in the background: {{(this.endTimer - this.startTimer).toFixed(2)}} ms</h5>
             </div>
         </div>
     </div>
@@ -49,44 +81,62 @@
                 pieceWidth: null,
                 pieceHeight: null,
                 started: false,
+                chosen: null,
                 startIndex:0,
+                startTimer: null,
+                endTimer: null,
                 animations:[],
             }
         },
         methods: {
             insertion: function() {
+                this.chosen = {'name': 'Insertion Sort','complexity': 'O(n^2)'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
 
+                this.startTimer = performance.now();
                 insertionSort(postDataCopy, this.animations);
+                this.endTimer = performance.now();
                 this.processAnimation();
             },
             bubble: function() {
+                this.chosen = {'name': 'Bubble Sort','complexity': 'O(n^2)'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
 
+                this.startTimer = performance.now();
                 bubbleSort(postDataCopy, this.animations);
+                this.endTimer = performance.now();
                 this.processAnimation();
             },
             selection: function() {
+                this.chosen = {'name': 'Selection Sort','complexity': 'O(n^2)'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
 
+                this.startTimer = performance.now();
                 selectionSort(postDataCopy, this.animations);
+                this.endTimer = performance.now();
                 this.processAnimation();
             },
             quick: function() {
+                this.chosen = {'name': 'Quick Sort','complexity': 'O(n*log(n))'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
 
-                quickSort(postDataCopy, this.animations, 0, this.randoms.length - 1)
+                this.startTimer = performance.now();
+                quickSort(postDataCopy, this.animations, 0, this.randoms.length - 1);
+                this.endTimer = performance.now();
                 this.processAnimation();
             },
             heap: function() {
+                this.chosen = {'name': 'Heap Sort','complexity': 'O(n*log(n))'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
 
+                this.startTimer = performance.now();
                 heapSort(postDataCopy, this.animations);
+                this.endTimer = performance.now();
                 this.processAnimation();
             },
             start: function() {
@@ -136,10 +186,10 @@
             },
             highlight: function(first, second) {
                 this.ctx.strokeStyle = "#cfe627";
-                this.ctx.lineWidth = 10;
+                this.ctx.lineWidth = 5;
                 this.ctx.strokeRect(this.randoms[first].col* this.pieceWidth,this.randoms[first].row * this.pieceHeight, this.pieceWidth, this.pieceHeight )
                 this.ctx.strokeStyle = "#cfe627";
-                this.ctx.lineWidth = 10;
+                this.ctx.lineWidth = 5;
                 this.ctx.strokeRect(this.randoms[second].col * this.pieceWidth, this.randoms[second].row * this.pieceHeight, this.pieceWidth, this.pieceHeight)
                 this.drawImage();
             },
@@ -161,14 +211,3 @@
         }
     }
 </script>
-
-<style>
-    body {
-        background-color: ivory;
-        padding: 10px;
-    }
-
-    .btn-space {
-        margin-right: 5px;
-    }
-</style>

@@ -1,0 +1,13 @@
+body {
+    background-color: ivory;
+    padding: 10px;
+}
+
+.btn-space {
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+}
+
+#canvas{
+    border:2px solid #28a745 !important;
+}
