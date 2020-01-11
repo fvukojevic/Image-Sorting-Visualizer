@@ -1,3 +1,5 @@
+Real Readme comming soon, as for now, this is just a basic way you start a vuejs app after cloning
+
 # image-visualizer
 
 ## Project setup
