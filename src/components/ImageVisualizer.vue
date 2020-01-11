@@ -20,6 +20,7 @@
                     <button class="btn btn-primary btn-space" @click="selection">Selection sort</button>
                     <button class="btn btn-primary btn-space" @click="bubble">Bubble sort</button>
                     <button class="btn btn-primary btn-space" @click="quick">Quick sort</button>
+                    <button class="btn btn-primary btn-space" @click="heap">Heap sort</button>
                 </div>
             </div>
             <br>
@@ -32,7 +33,7 @@
 </template>
 
 <script>
-    import {selectionSort, bubbleSort, insertionSort, quickSort} from "../sorts";
+    import {selectionSort, bubbleSort, insertionSort, quickSort, heapSort} from "../sorts";
 
     export default {
         name: 'ImageVisualizer',
@@ -81,6 +82,13 @@
                 quickSort(postDataCopy, this.animations, 0, this.randoms.length - 1)
                 this.processAnimation();
             },
+            heap: function() {
+                this.animations = [];
+                let postDataCopy = this.randoms.slice();
+
+                heapSort(postDataCopy, this.animations);
+                this.processAnimation();
+            },
             start: function() {
                 this.checkForInvalidInput();
                 this.started = true;
@@ -111,8 +119,6 @@
                 if(this.rows > 10) this.rows = 10;
                 if(this.cols < 1) this.cols = 1;
                 if(this.cols > 10) this.cols = 10;
-
-                if(this.link.match(/\.(jpeg|jpg|gif|png)$/) == null) this.link = 'https://i.stack.imgur.com/l60Hf.png';
             },
             processAnimation: function() {
                 let self = this;

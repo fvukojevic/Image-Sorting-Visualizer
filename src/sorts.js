@@ -64,10 +64,47 @@ function quickSort(arrayCopy, animations, startIdx, endIdx) {
     }
 }
 
+function heapSort(arrayCopy, animations) {
+    buildMaxHeap(arrayCopy, animations);
+    for(let endIdx = arrayCopy.length - 1; endIdx > 0; endIdx --) {
+        swap(0, endIdx, arrayCopy);
+        animations.push([0, endIdx]);
+        siftDown(0, endIdx - 1, arrayCopy, animations);
+    }
+}
+
+function  buildMaxHeap(array, animations) {
+    const firstParentIndex = Math.floor((array.length- 2) /2);
+    for(let currentIndex = firstParentIndex; currentIndex >= 0; currentIndex--) {
+        siftDown(currentIndex, array.length - 1, array, animations)
+    }
+}
+
+function siftDown(currentIndex, endIndex, heap, animations) {
+    let childOneIndex = currentIndex * 2 + 1;
+    while(childOneIndex <= endIndex) {
+        const childTwoIndex = currentIndex * 2 + 2 <= endIndex ? currentIndex * 2 + 2 : - 1;
+        let indexToSwap;
+        if(childTwoIndex !== -1 && heap[childTwoIndex].val > heap[childOneIndex].val) {
+            indexToSwap = childTwoIndex;
+        } else {
+            indexToSwap = childOneIndex;
+        }
+        if(heap[indexToSwap].val > heap[currentIndex].val) {
+            swap(currentIndex, indexToSwap, heap);
+            animations.push([currentIndex, indexToSwap]);
+            currentIndex = indexToSwap;
+            childOneIndex = currentIndex * 2 + 1;
+        } else {
+            return;
+        }
+    }
+}
+
 function swap(i, j, array) {
     let temp = array[i];
     array[i] = array[j];
     array[j] = temp;
 }
 
-export {selectionSort, bubbleSort, insertionSort, quickSort}
+export {selectionSort, bubbleSort, insertionSort, quickSort, heapSort}
