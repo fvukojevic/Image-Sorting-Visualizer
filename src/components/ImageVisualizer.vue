@@ -3,7 +3,7 @@
         <div v-show="!started">
             <div class="container h-100 d-flex justify-content-center">
                 <div class="my-auto">
-                    <h1 class="text-center">Sorting Image Visualizer</h1>
+                    <h1 class="text-center" style="color:#ecf0f1">Sorting Image Visualizer</h1>
                     <hr>
                     <div class="input-group input-group-sm mb-3">
                         <div class="input-group-prepend">
@@ -23,28 +23,28 @@
                         </div>
                         <input type="text" class="form-control" v-model="link" aria-describedby="inputGroup-sizing-sm">
                     </div>
-                    <button class="btn-success col text-center" @click="start">Process Image</button>
+                    <button class="btn-primary col text-center" @click="start">Process Image</button>
                 </div>
             </div>
         </div>
         <div v-show="started">
-              <div class="row">
+            <div class="row">
                 <div class="container h-100 d-flex justify-content-center">
-                    <h1 class="text-center">Choose a sorting algorithm</h1>
+                    <h1 class="text-center" style="color:#ecf0f1">Choose a sorting algorithm</h1>
                 </div>
                 <div class="container h-100 d-flex justify-content-center">
                     <div class="col-md-12">
-                        <button class="btn btn-outline-success btn-space" @click="insertion">Insertion sort</button>
-                        <button class="btn btn-outline-success btn-space" @click="selection">Selection sort</button>
-                        <button class="btn btn-outline-success btn-space" @click="bubble">Bubble sort</button>
-                        <button class="btn btn-outline-success btn-space" @click="quick">Quick sort</button>
-                        <button class="btn btn-outline-success btn-space" @click="heap">Heap sort</button>
+                        <button class="btn btn-primary btn-space" @click="insertion">Insertion sort</button>
+                        <button class="btn btn-primary btn-space" @click="selection">Selection sort</button>
+                        <button class="btn btn-primary btn-space" @click="bubble">Bubble sort</button>
+                        <button class="btn btn-primary btn-space" @click="quick">Quick sort</button>
+                        <button class="btn btn-primary btn-space" @click="heap">Heap sort</button>
                     </div>
-               </div>
-                <div class="container h-100 d-flex justify-content-center" v-if="this.finished">
-                    <button class="btn btn-success btn-space" @click="reloadPage">Finished! Start again?</button>
                 </div>
-              </div>
+                <div class="container h-100 d-flex justify-content-center" v-if="this.finished">
+                    <button class="btn btn-primary btn-space mt-4" @click="reloadPage">Finished! Start again?</button>
+                </div>
+            </div>
             <br>
             <div class="container h-100 d-flex justify-content-center">
                 <canvas id="canvas" ref="canvas" style="width:80%; height:80%">
@@ -52,24 +52,22 @@
             </div>
             <br>
             <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
-                <h5 class="text-center">Choosen: {{ this.chosen.name }}</h5>
+                <h5 class="text-center" style="color:#ecf0f1">Choosen: {{ this.chosen.name }}</h5>
             </div>
             <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
-                <h5 class="text-center">Time complexity for {{ this.chosen.name }}: <b>{{ this.chosen.complexity }}</b></h5>
+                <h5 class="text-center" style="color:#ecf0f1">Time complexity for {{ this.chosen.name }}: <b>{{ this.chosen.complexity }}</b></h5>
             </div>
             <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
-                <h5 class="text-center">Number of animations(swaps) : <b>{{this.animations.length}}</b></h5>
+                <h5 class="text-center" style="color:#ecf0f1">Number of animations(swaps) : <b>{{this.animations.length}}</b></h5>
             </div>
             <div class="container h-100 d-flex justify-content-center" v-if="this.chosen !== null">
-                <h5 class="text-center">Execution time in the background: <b>{{(this.endTimer - this.startTimer).toFixed(2)}}</b> ms</h5>
+                <h5 class="text-center" style="color:#ecf0f1;">Execution time in the background: <b>{{(this.endTimer - this.startTimer).toFixed(2)}}</b> ms</h5>
             </div>
         </div>
     </div>
 </template>
-
 <script>
     import {selectionSort, bubbleSort, insertionSort, quickSort, heapSort} from "../assets/scripts/sorts";
-
     export default {
         name: 'ImageVisualizer',
         data: function () {
@@ -97,7 +95,6 @@
                 this.chosen = {'name': 'Insertion Sort','complexity': 'O(n^2)'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
-
                 this.startTimer = performance.now();
                 insertionSort(postDataCopy, this.animations);
                 this.endTimer = performance.now();
@@ -107,7 +104,6 @@
                 this.chosen = {'name': 'Bubble Sort','complexity': 'O(n^2)'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
-
                 this.startTimer = performance.now();
                 bubbleSort(postDataCopy, this.animations);
                 this.endTimer = performance.now();
@@ -117,7 +113,6 @@
                 this.chosen = {'name': 'Selection Sort','complexity': 'O(n^2)'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
-
                 this.startTimer = performance.now();
                 selectionSort(postDataCopy, this.animations);
                 this.endTimer = performance.now();
@@ -127,7 +122,6 @@
                 this.chosen = {'name': 'Quick Sort','complexity': 'O(n*log(n))'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
-
                 this.startTimer = performance.now();
                 quickSort(postDataCopy, this.animations, 0, this.randoms.length - 1);
                 this.endTimer = performance.now();
@@ -137,7 +131,6 @@
                 this.chosen = {'name': 'Heap Sort','complexity': 'O(n*log(n))'}
                 this.animations = [];
                 let postDataCopy = this.randoms.slice();
-
                 this.startTimer = performance.now();
                 heapSort(postDataCopy, this.animations);
                 this.endTimer = performance.now();
@@ -149,7 +142,6 @@
                 this.canvas=this.$refs.canvas;
                 this.ctx =this.canvas.getContext("2d");
                 let self = this;
-
                 this.img=new Image();
                 this.img.src=this.link;
                 this.img.onload= function() {
@@ -157,7 +149,6 @@
                     self.canvas.height=self.img.height;
                     self.pieceWidth=self.canvas.width/self.cols;
                     self.pieceHeight=self.canvas.height/self.rows;
-
                     for(let i = 0; i < self.rows; i++) {
                         for(let j = 0; j<self.cols; j++) {
                             let part = {col:j, row:i, val: (i*10)+j}
@@ -169,7 +160,7 @@
                 };
             },
             reloadPage: function() {
-              location.reload();
+                location.reload();
             },
             checkForInvalidInput: function() {
                 if(this.rows < 1) this.rows = 1;
